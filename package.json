@@ -1,0 +1,19 @@
+{
+  "name": "whatogift-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/melvin-pointdexter/Whatogift-Backend.git"
+  },
+  "author": "Melvin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/melvin-pointdexter/Whatogift-Backend/issues"
+  },
+  "homepage": "https://github.com/melvin-pointdexter/Whatogift-Backend#readme"
+}
