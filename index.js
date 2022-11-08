@@ -12,6 +12,9 @@ const mongourl = 'mongodb+srv://smith:QHa4nDmgE9tGO470@cluster0.ueydepz.mongodb.
 //=============================Begin routes=====================================
 import accountRoute from './controllers/account.js';
 app.use('/api/account',accountRoute);
+
+import companiesRoute from './controllers/company.js';
+app.use('/api/company',companiesRoute);
 //==============================End routes======================================
 
 mongoose.connect(mongourl)
