@@ -20,11 +20,13 @@ Router.post("/signup", async(req,res) => {
         console.log(accounts);
         if (accounts){
             return res.status(500).json({
+                status: false,
                 message: "User with that email already exists"
             });
         }
         else if (email==undefined || email==null || password==undefined || password==null){
             return res.status(500).json({
+                status: false,
                 message: "Insufficient data"
             });
         }
@@ -42,12 +44,14 @@ Router.post("/signup", async(req,res) => {
             _account.save()
             .then(results => {
                 return res.status(200).json({
+                    status: true,
                     message: "Verify the created user\n" + results,
                     code: code
                 });
             })
             .catch(err => {
                 return res.status(500).json({
+                    status: false,
                     message: err
                 });
             })
@@ -74,11 +78,13 @@ Router.post("/verify", async(req,res) => {
             accounts.save()
             .then(update => {
                 return res.status(200).json({
+                    status: true,
                     message: "Account verified!"
                 });
             })
             .catch(err =>{
                 return res.status(500).json({
+                    status: false,
                     message: err
                 });
             })
@@ -86,6 +92,7 @@ Router.post("/verify", async(req,res) => {
     })
     .catch(err =>{
         return res.status(500).json({
+            status: false,
             message: err
         });
     })
@@ -108,24 +115,28 @@ Router.post("/login", async(req,res) => {
                 const token=await jwt.sign(data,'cqu9unweap82');
 
                 return res.status(200).json({
+                    status: true,
                     message: "Successfully logged in!",
                     token: token
                 });
             }
             else{
                 return res.status(500).json({
+                    status: false,
                     message: "Wrong password/haven't activated account"
                 });
             }
         }
         else{
             return res.status(500).json({
+                status: false,
                 message: "No such user exists. if not then check if you verified it."
             });
         }
     })
     .catch(err =>{
         return res.status(500).json({
+            status: false,
             message: err
         });
     })
@@ -145,17 +156,20 @@ Router.get("/getOverview", async(req,res) => {
     .then(async accounts =>{
         if (accounts){
             return res.status(200).json({
+                status: true,
                 overview: accounts
             });
         }
         else{
             return res.status(500).json({
+                status: false,
                 message: "No such user exists."
             });
         }
     })
     .catch(err =>{
         return res.status(500).json({
+            status: false,
             message: err
         });
     })
