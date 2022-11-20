@@ -3,6 +3,7 @@ const Router = express.Router();
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import Auth from './auth.js';
 
 //MODELS
 import Account from "../models/account.js";
@@ -149,7 +150,15 @@ Router.put("/updateAccount",async(req,res) => {
     
 });
 
-Router.get("/getOverview", async(req,res) => {
+
+router.get('/getOverview', Auth, async (req, res) => {
+    return res.status(200).json({
+        message: `Hello ${req.user.firstName} ${req.user.lastName}`
+    });
+})
+
+
+/*Router.get("/getOverview", async(req,res) => {
     // ===
     const {email} = req.body;
     Account.findOne({where: {email: email}})
@@ -173,7 +182,7 @@ Router.get("/getOverview", async(req,res) => {
             message: err
         });
     })
-});
+});*/
 
 export default Router;
 
