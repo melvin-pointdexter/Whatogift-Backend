@@ -1,6 +1,8 @@
 import express from "express";
 const Router = express.Router();
 
+import Company from "../models/company.js";
+
 Router.post("/createCompany", async(req,res)=>{
     const user = req.user;
     const company = await Company.find({associateId: user._id});
@@ -33,6 +35,32 @@ Router.post("/createCompany", async(req,res)=>{
             });
         })
     }
+
+});
+
+Router.post("/getCompany", async(req, res) => {
+    const {_id, _companyName} = req.body;
+    Company.findOne({where: {id: _id}})
+    .then(async company =>{
+        if (company){
+            return res.status(200).json({
+                status: true,
+                company: company
+            });
+        }
+        else{
+            return res.status(500).json({
+                status: false,
+                message: "No such company exists."
+            });
+        }
+    })
+    .catch(err =>{
+        return res.status(500).json({
+            status: false,
+            message: err
+        });
+    })
 
 });
 

@@ -145,7 +145,7 @@ Router.post("/login", async(req,res) => {
 });
 
 //update account
-Router.put("/updateAccount",async(req,res) => {
+Router.put("/updateAccount", Auth,async(req,res) => {
     //complete
     
 });
