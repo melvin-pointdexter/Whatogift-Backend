@@ -17,4 +17,6 @@ const companySchema = new Schema({
     logo: {type:String, default:"https://cdn-icons-png.flaticon.com/512/21/21104.png"},
     bio: String,
     createdAt: {type: Date, default: Date.now},
-})
+});
+
+export default mongoose.model('Company',companySchema);

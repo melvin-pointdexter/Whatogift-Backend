@@ -36,6 +36,7 @@ Router.post("/signup", async(req,res) => {
             const hash = await bcryptjs.hash(password,10);
             const _account = new Account({
                 _id: id,
+                associateId: id,
                 email: email,
                 password: hash,
                 firstName: firstName,
@@ -151,7 +152,7 @@ Router.put("/updateAccount", Auth,async(req,res) => {
 });
 
 
-router.get('/getOverview', Auth, async (req, res) => {
+Router.get('/getOverview', Auth, async (req, res) => {
     return res.status(200).json({
         message: `Hello ${req.user.firstName} ${req.user.lastName}`
     });
