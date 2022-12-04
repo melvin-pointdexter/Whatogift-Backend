@@ -37,7 +37,7 @@ import Brand from "../models/brand.js";
  *   requestBody:
  *    content:
  *     application/json:
- *      scehma:
+ *      schema:
  *       $ref: '#/definitions/Brand'
  *   responses:
  *    200: 
@@ -45,7 +45,7 @@ import Brand from "../models/brand.js";
  *    500:
  *     description: ERROR was found
  */
-Router.post('/create_new_brand', Auth, async(req,res) => {
+Router.post('/create_new_brand',  async(req,res) => {
     const {brandName,brandLogo} = req.body;
     const id = mongoose.Types.ObjectId();
     const _brand = new Brand({
@@ -98,7 +98,7 @@ Router.get('/get_all_brands', async(req,res) => {
  *      name: id
  *      schema:
  *       type: string
- *       required: true
+ *      required: true
  *   responses:
  *    200: 
  *     description: A single brand object
@@ -121,16 +121,17 @@ Router.delete('/delete_brand', async(req,res) => {});
  * @swagger
  * /api/product/get_all_categories:
  *  get:
- *      summary: Returns a list of all of the categories in the database
- *      tags: [Products]
- *      responses:
- *          200: 
- *              description: This is a list of all of the categories
- *              content: application/json
- *              schema:
- *                  type: array
- *          500:
- *              description: ERROR was found
+ *   summary: Returns a list of all of the categories in the database
+ *   tags: [Products]
+ *   responses:
+ *    200: 
+ *     description: This is a list of all of the categories
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: array
+ *    500:
+ *     description: ERROR was found
  */
 Router.post("/get_all_categories", async(req,res) => {
     Category.find()
@@ -243,16 +244,17 @@ Router.post('/create_new_product', async(req,res) => {
  * @swagger
  * /api/product/get_all_products:
  *  get:
- *      summary: Returns a list of all of the products in the database
- *      tags: [Products]
- *      responses:
- *          200: 
- *              description: This is a list of all of the products
- *              content: application/json
- *              schema:
- *                  type: array
- *          500:
- *              description: ERROR was found
+ *   summary: Returns a list of all of the products in the database
+ *   tags: [Products]
+ *   responses:
+ *    200: 
+ *     description: This is a list of all of the products
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: array
+ *    500:
+ *     description: ERROR was found
  */
 Router.post("/get_all_products", async(req,res) => {
     Product.find()

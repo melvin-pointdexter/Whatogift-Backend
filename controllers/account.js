@@ -8,6 +8,83 @@ import Auth from './auth.js';
 //MODELS
 import Account from "../models/account.js";
 
+/**
+ * @swagger
+ * definitions:
+ *  Account:
+ *   type: object
+ *   properties:
+ *    email:
+ *     type: string
+ *     description: The email adress for the account
+ *     example: smormu@hotmail.com
+ *    password:
+ *     type: string
+ *     description: The password for the account
+ *     example: smormu1986
+ *    firstName:
+ *     type: string
+ *     description: The first name of the user
+ *     example: "Smormu"
+ *    lastName:
+ *     type: string
+ *     description: The last name of the user
+ *     example: "Carter"
+ *    dob:
+ *     type: Date
+ *     description: The date of birth of the user
+ *     example: 21/2/1986
+ *    gender:
+ *     type: String
+ *     description: The gender of the user
+ *     example: "Male"
+ *    avatar:
+ *     type: String
+ *     description: The avatar of the user
+ *     example: https://cdn-icons-png.flaticon.com/512/21/21104.png
+ *    contact:
+ *     type: object
+ *     properties:
+ *      address:
+ *       type: String
+ *       description: The address of the user
+ *       example: "162 wharf avenue"
+ *      city:
+ *       type: String
+ *       description: The city the user lives in
+ *       example: "New york city"
+ *      state:
+ *       type: String
+ *       description: The state the user lives in
+ *       example: "New york"
+ *      ZIP:
+ *       type: String
+ *       description: The ZIP code of the user
+ *       example: "New york"
+ *      mobile:
+ *       type: String
+ *       description: The phone number of the user
+ *       example: "98-271-4889"
+ */
+
+/**
+ * @swagger
+ * /api/account/signup:
+ *  post:
+ *   summary: Creates an account
+ *   description: Use this endpoint to create a new account
+ *   tags: [Account]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Account'
+ *   responses:
+ *    200: 
+ *     description: Successfully created an account
+ *    500:
+ *     description: ERROR was found
+ */
 Router.post("/signup", async(req,res) => {
     //get user register data
     //check if user exists
@@ -67,6 +144,24 @@ Router.post("/signup", async(req,res) => {
 
 });
 
+/**
+ * @swagger
+ * /api/product/verify:
+ *  post:
+ *   summary: Verifies an account
+ *   description: Use this endpoint to verify an account
+ *   tags: [Account]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Account'
+ *   responses:
+ *    200: 
+ *     description: Successfully verified an account
+ *    500:
+ *     description: ERROR was found
+ */
 Router.post("/verify", async(req,res) => {
     //get code + email
     //check if code match
@@ -101,6 +196,24 @@ Router.post("/verify", async(req,res) => {
 
 });
 
+/**
+ * @swagger
+ * /api/product/login:
+ *  post:
+ *   summary: Logs onto an account by returning a webtoken upon a successful login
+ *   description: Use this endpoint to log into an account
+ *   tags: [Account]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Account'
+ *   responses:
+ *    200: 
+ *     description: Success, returns a webtoken
+ *    500:
+ *     description: ERROR was found
+ */
 Router.post("/login", async(req,res) => {
     //get user login data
     //check if user exists and password match

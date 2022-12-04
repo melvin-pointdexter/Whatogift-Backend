@@ -23,7 +23,19 @@ const options = {
             {
                 url: "http://localhost:9001"
             }
-        ]
+        ],
+        components: {
+            securitySchemas: {
+                bearerAuth:{
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT'
+                }
+            }
+        },
+        security:{
+            bearerAuth: []
+        }
     },
     apis: ["./controllers/*.js"]
 };
@@ -44,7 +56,7 @@ app.use('/api/product',productRoute);
 
 mongoose.connect(mongourl)
 .then(results=>{
-    console.log(results);
+    //console.log(results);
     const port = 9001;
     app.listen(port, function(){
         console.log(`Server is running via port ${port}`);
