@@ -48,19 +48,19 @@ import Account from "../models/account.js";
  *      address:
  *       type: String
  *       description: The address of the user
- *       example: "162 wharf avenue"
+ *       example: "612 wharf avenue"
  *      city:
  *       type: String
  *       description: The city the user lives in
- *       example: "New york city"
+ *       example: "Red Bank"
  *      state:
  *       type: String
  *       description: The state the user lives in
- *       example: "New york"
+ *       example: "New jersey"
  *      ZIP:
  *       type: String
  *       description: The ZIP code of the user
- *       example: "New york"
+ *       example: "872231"
  *      mobile:
  *       type: String
  *       description: The phone number of the user
