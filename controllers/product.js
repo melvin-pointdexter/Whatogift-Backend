@@ -119,6 +119,17 @@ Router.delete('/delete_brand', async(req,res) => {});
 //===================== CATEGORIES ===========================
 /**
  * @swagger
+ * definitions:
+ *  Category:
+ *   type: object
+ *   properties:
+ *    categoryName:
+ *     type: string
+ *     description: The name of the category
+ *     example: computers
+ */
+/**
+ * @swagger
  * /api/product/get_all_categories:
  *  get:
  *   summary: Returns a list of all of the categories in the database
@@ -170,14 +181,112 @@ Router.post('/create_new_category', async(req,res) => {
     .catch(error => {return res.status(500).json({status: false, message: error.message})})
 });
 Router.delete('/delete_category', async(req,res) => {});
-//===================== CATEGORIES ===========================
-
+//===================== PRODUCTS ===========================
+/**
+ * @swagger
+ * definitions:
+ *  Product:
+ *   type: object
+ *   properties:
+ *    productName:
+ *     type: string
+ *     description: The name of the product
+ *     example: Amiga 1000
+ *    productImage:
+ *     type: array
+ *     items:
+ *      type: object
+ *      properties:
+ *       imageSource:
+ *        type: string
+ *        description: The image url of the product
+ *        example: https://upload.wikimedia.org/wikipedia/commons/e/e8/Amiga_1000_PAL.jpg
+ *    companyId:
+ *     type: objectId
+ *     description: The ID of the company that sells the product
+ *     example: 87
+ *    categoryId:
+ *     type: objectId
+ *     description: The ID of a category of the product
+ *     example: 12
+ *    brandId:
+ *     type: objectId
+ *     description: The ID of a brand associated with the product
+ *     example: 25
+ *    productPrice:
+ *     type: number
+ *     description: The price of the product
+ *     example: 400
+ *    productDescription:
+ *     type: string
+ *     description: A description of the product
+ *     example: a personal computer from the Amiga line of computers
+ *    unitInStock:
+ *     type: number
+ *     description: The number of units in stock
+ *     example: 100
+ *    reviews:
+ *     type: array
+ *     items:
+ *      type: object
+ *      properties:
+ *       rating:
+ *        type: number
+ *        description: How highly is the product rated out of 10
+ *        example: 8
+ *       title:
+ *        type: string
+ *        description: The title of the review
+ *        example: Awesome!
+ *       comments:
+ *        type: string
+ *        description: The review itself
+ *        example: This computer rules!
+ *    ageRange:
+ *     type: object
+ *     properties:
+ *      minAge:
+ *       type: number
+ *       description: The minumum age requirement
+ *       example: 6
+ *      maxAge:
+ *       type: number
+ *       description: The maximum age requirement
+ *       example: 120
+ *    tags:
+ *     type: array
+ *     items:
+ *      type: object
+ *      properties:
+ *       tag:
+ *        type: string
+ *        description: A keyword associated with the product
+ *        example: computers
+ */
+/**
+ * @swagger
+ * /api/product/create_new_product:
+ *  post:
+ *   summary: Creates a product
+ *   description: Use this endpoint to create a new product
+ *   tags: [Products]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Product'
+ *   responses:
+ *    200: 
+ *     description: Successfully created a new product
+ *    500:
+ *     description: ERROR was found
+ */
 Router.post('/create_new_product', async(req,res) => {
     const id = mongoose.Types.ObjectId();
     const {
         companyId,categoryId,brandId,
         productName,productPrice,productDescription,
-        unitInStock, productImage
+        unitInStock, productImage, tags, ageRange
     } = req.body;
     const _product = new Product({
         _id: id,
@@ -189,7 +298,9 @@ Router.post('/create_new_product', async(req,res) => {
         productPrice: productPrice,
         productDescription: productDescription,
         unitInStock: unitInStock,
-        reviews: []
+        reviews: [],
+        tags: tags,
+        ageRange: ageRange,
     });
     _product.save()
     .then(product_created => {
@@ -242,6 +353,47 @@ Router.post('/create_new_product', async(req,res) => {
 
 /**
  * @swagger
+ * /api/product/get_relevent_gifts:
+ *  get:
+ *   summary: Returns a list of every gift from the products in the database that is relevent to the criteria in the header
+ *   tags: [Products]
+ *   responses:
+ *    200: 
+ *     description: This is a list of all of the products
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: array
+ *    500:
+ *     description: ERROR was found
+ */
+Router.get("/get_relevent_gifts", async(req,res) => {
+    const { location, event, budget, gender, age, intimacy, interests} = req.body;
+    Product.find()
+    .then(async products =>{
+        if (products){
+            return res.status(200).json({
+                status: true,
+                overview: products
+            });
+        }
+        else{
+            return res.status(500).json({
+                status: false,
+                message: "No products exist."
+            });
+        }
+    })
+    .catch(err =>{
+        return res.status(500).json({
+            status: false,
+            message: err
+        });
+    })
+});
+
+/**
+ * @swagger
  * /api/product/get_all_products:
  *  get:
  *   summary: Returns a list of all of the products in the database
@@ -256,7 +408,7 @@ Router.post('/create_new_product', async(req,res) => {
  *    500:
  *     description: ERROR was found
  */
-Router.post("/get_all_products", async(req,res) => {
+Router.get("/get_all_products", async(req,res) => {
     Product.find()
     .then(async products =>{
         if (products){

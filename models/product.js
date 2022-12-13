@@ -24,8 +24,19 @@ const productSchema = new Schema({
             title: String
         }
     ],
-    logo: {type:String, default: "https://cdn.logo.com/hotlink-ok/logo-social.png"},
     createdAt: {type: Date, default: Date.now},
+    
+    ageRange:{
+        minAge: Number,
+        maxAge: Number
+    },
+    tags:[
+        {
+            tag: String
+        }
+    ],
 })
+
+//logo: {type:String, default: "https://cdn.logo.com/hotlink-ok/logo-social.png"},
 
 export default mongoose.model("Product", productSchema);

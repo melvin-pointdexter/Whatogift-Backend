@@ -25,11 +25,11 @@ import Account from "../models/account.js";
  *    firstName:
  *     type: string
  *     description: The first name of the user
- *     example: "Smormu"
+ *     example: Smormu
  *    lastName:
  *     type: string
  *     description: The last name of the user
- *     example: "Carter"
+ *     example: Carter
  *    dob:
  *     type: Date
  *     description: The date of birth of the user
@@ -37,7 +37,7 @@ import Account from "../models/account.js";
  *    gender:
  *     type: String
  *     description: The gender of the user
- *     example: "Male"
+ *     example: Male
  *    avatar:
  *     type: String
  *     description: The avatar of the user
@@ -48,23 +48,23 @@ import Account from "../models/account.js";
  *      address:
  *       type: String
  *       description: The address of the user
- *       example: "612 wharf avenue"
+ *       example: 612 wharf avenue
  *      city:
  *       type: String
  *       description: The city the user lives in
- *       example: "Red Bank"
+ *       example: Red Bank
  *      state:
  *       type: String
  *       description: The state the user lives in
- *       example: "New jersey"
+ *       example: New jersey
  *      ZIP:
  *       type: String
  *       description: The ZIP code of the user
- *       example: "872231"
+ *       example: 872231
  *      mobile:
  *       type: String
  *       description: The phone number of the user
- *       example: "98-271-4889"
+ *       example: 98-271-4889
  */
 
 /**
