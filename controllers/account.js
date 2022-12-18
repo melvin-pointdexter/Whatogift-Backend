@@ -93,7 +93,7 @@ Router.post("/signup", async(req,res) => {
     const id = mongoose.Types.ObjectId();
     const {firstName, lastName, email,password} = req.body;
     console.log(email);
-    Account.findOne({where: {email: email}})
+    Account.findOne({email: email})
     .then(async accounts =>{
         console.log(accounts);
         if (accounts){
@@ -168,7 +168,7 @@ Router.post("/verify", async(req,res) => {
     //update db true or false
     const {email,passcode} = req.body;
     console.log(email+"\n"+passcode);
-    Account.findOne({where: {email: email, passcode: passcode}})
+    Account.findOne({email: email, passcode: passcode})
     .then( accounts =>{
         if (accounts){
             accounts.isVerified= true;
@@ -220,7 +220,7 @@ Router.post("/login", async(req,res) => {
     //generate JWT token
     //res
     const {email, password} = req.body;
-    Account.findOne({where: {email: email}})
+    Account.findOne({email: email})
     .then(async accounts =>{
         if (accounts){
             
@@ -269,41 +269,6 @@ Router.get('/getOverview', Auth, async (req, res) => {
     return res.status(200).json({
         message: `Hello ${req.user.firstName} ${req.user.lastName}`
     });
-})
-
-
-/*Router.get("/getOverview", async(req,res) => {
-    // ===
-    const {email} = req.body;
-    Account.findOne({where: {email: email}})
-    .then(async accounts =>{
-        if (accounts){
-            return res.status(200).json({
-                status: true,
-                overview: accounts
-            });
-        }
-        else{
-            return res.status(500).json({
-                status: false,
-                message: "No such user exists."
-            });
-        }
-    })
-    .catch(err =>{
-        return res.status(500).json({
-            status: false,
-            message: err
-        });
-    })
-});*/
+});
 
 export default Router;
-
-/*
-Router.get('/greeting',async(req,res)=>{
-    return res.status(200).json({
-        message:"Hello from whatogift app"
-    });
-})
-*/

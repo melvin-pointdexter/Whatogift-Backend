@@ -1,17 +1,17 @@
 import express from "express";
 const Router = express.Router();
-//import bcryptjs from "bcryptjs";
-//import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import Auth from './auth.js';
 
 import Product from "../models/product.js";
 import Category from "../models/category.js";
 import Brand from "../models/brand.js";
+import Company from "../models/company.js";
 
 
+//=================== HELPER FUNCTIONS ===================
 
-//===================== BRANDS ===========================
+//======================== BRANDS ========================
 /**
  * @swagger
  * definitions:
@@ -116,7 +116,7 @@ Router.get('/get_brand_by_id/:id', async(req,res) => {
     .catch(error => { return res.status(500).json({status: false, message: error.message})})
 });
 Router.delete('/delete_brand', async(req,res) => {});
-//===================== CATEGORIES ===========================
+//===================== CATEGORIES =====================
 /**
  * @swagger
  * definitions:
@@ -353,25 +353,100 @@ Router.post('/create_new_product', async(req,res) => {
 
 /**
  * @swagger
+ * definitions:
+ *  Criteria:
+ *   type: object
+ *   properties:
+ *    budget:
+ *     type: number
+ *     description: The maximum price
+ *     example: 1000
+ *    gender:
+ *     type: string
+ *     description: The gender of the gift receiver
+ *     example: male
+ *    events:
+ *     type: array
+ *     items:
+ *      type: object
+ *      properties:
+ *       event:
+ *        type: string
+ *        description: An event the gift fits
+ *        example: Birthday
+ *    interests:
+ *     type: array
+ *     items:
+ *      type: object
+ *      properties:
+ *       interest:
+ *        type: string
+ *        description: An interest the gift fulfills
+ *        example: stationery
+ *    age:
+ *     type: number
+ *     description: The age of the gift receiver
+ *     example: 26
+ *    intimacy:
+ *     type: number
+ *     description: The closeness of the gifter and the receiver
+ *     example: 4
+ *    location:
+ *     type: object
+ *     properties:
+ *      latitude: 
+ *       type: string
+ *       description: The latitude of the gifter
+ *       example: -4.322447
+ *      longitude:
+ *       type: string
+ *       description: The longtitude of the gifter
+ *       example: 15.307045
+ *      maxRange:
+ *       type: number
+ *       description: The maximum range of stores close to the gifter
+ *       example: 15
+ */
+/**
+ * @swagger
  * /api/product/get_relevent_gifts:
  *  get:
  *   summary: Returns a list of every gift from the products in the database that is relevent to the criteria in the header
  *   tags: [Products]
+ *   requestBody:
+ *    content:
+ *     application/json:
+ *      schema:
+ *       $ref: '#/definitions/Criteria'
  *   responses:
  *    200: 
- *     description: This is a list of all of the products
+ *     description: Returns a list of all the relevent products
  *     content:
  *      application/json:
  *       schema:
  *        type: array
  *    500:
  *     description: ERROR was found
+ *   
  */
 Router.get("/get_relevent_gifts", async(req,res) => {
-    const { location, event, budget, gender, age, intimacy, interests} = req.body;
+    const { location, events, budget, gender, age, intimacy, interests} = req.body;
     Product.find()
     .then(async products =>{
         if (products){
+            //after all products returned, filter out irrlevent gifts
+            const releventProducts = products.filter(product => 
+                (product.ageRange.minAge <= age &&
+                product.ageRange.maxAge >= age &&
+                product.tags.includes({tag: intimacy}) &&
+                product.productPrice <= budget &&
+                product.tags.includes({tag: gender}) &&
+                product.tags.some(interest => interests.includes(interest.tag)) &&
+                product.tags.some(event => events.includes(event.tag))));
+            const companiesID = new Set();
+            for (var i=0; i<releventProducts.length;i++){ companies.add(releventProducts[i].companyId); }
+            
+
             return res.status(200).json({
                 status: true,
                 overview: products
