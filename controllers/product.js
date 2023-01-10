@@ -443,13 +443,30 @@ Router.get("/get_relevent_gifts", async(req,res) => {
                 product.tags.includes({tag: gender}) &&
                 product.tags.some(interest => interests.includes(interest.tag)) &&
                 product.tags.some(event => events.includes(event.tag))));
-            const companiesID = new Set();
-            for (var i=0; i<releventProducts.length;i++){ companies.add(releventProducts[i].companyId); }
             
+            const companiesID = new Set();
+            for (var i=0; i<releventProducts.length;i++){ companies.add(releventProducts[i].companyId); }       //gets all relevent companies ID
+            const companiesSet = new Set();
+            for (var i=0; i<releventProducts.length;i++) { 
+                Company.findOne({_id: companiesID}).then(async comp => {
+                    companiesSet.add(comp);
+                })
+            }       //getting all relevent companies
+            var companiesFinal = Array.from(companiesSet);
+
+            function sortDistance(a,b){
+                var companyA = companiesFinal.findIndex((comp) => comp._id==a.companyId);
+                var companyB = companiesFinal.findIndex((comp) => comp._id==a.companyId);
+                var companyAlocation = companiesFinal[companyA].contact;
+                var companyBlocation = companiesFinal[companyB].contact;
+                return getDistance(location.latitude, location.longitude, companyAlocation.latitude, companyAlocation.longitude) - getDistance(location.latitude, location.longitude,companyBlocation.latitude, companyBlocation.longitude)
+            }
+
+            releventProducts.sort(sortDistance);        //sorts the products based on how close they are to the user
 
             return res.status(200).json({
                 status: true,
-                overview: products
+                overview: releventProducts
             });
         }
         else{
@@ -466,6 +483,14 @@ Router.get("/get_relevent_gifts", async(req,res) => {
         });
     })
 });
+
+function getDistance(lat1, lon1, lat2, lon2){
+    var r = 6371;
+    var p = 0.017453292519943295;       //Math.PI/180
+    var a = 0.5 - Math.cos((lat2-lat1)*p)/2 + Math.cos(lat1*p)*Math.cos(lat2*p) * (1-Math.cos((lon2-lon1)*p)) / 2;
+
+    return 2 * r * Math.asin(Math.sqrt(a))  //2*R*asin
+}
 
 /**
  * @swagger
